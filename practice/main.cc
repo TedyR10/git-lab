@@ -4,7 +4,7 @@
 #include <immintrin.h>
 #include <vector>
 #include <sys/random.h>
-
+#include <sys/sysinfo.h>
 using namespace std;
 
 int get_random_std()
@@ -54,7 +54,11 @@ int get_random_getrandom()
 
 int get_random(int (*random_func)())
 {
-    return random_func() % 200;
+    struct sysinfo info;
+    sysinfo(&info);
+
+    srand(info.uptime + info.procs);
+    return rand() % 100 + 1;
 }
 
 typedef int (*fp)();
